@@ -1,0 +1,4 @@
+namespace PHW
+{
+	void PrintHelloWorld();
+}

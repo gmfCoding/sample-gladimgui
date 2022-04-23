@@ -52,3 +52,4 @@ Just for the sake of the argument how would we go about building this with g++?
 What a mess! That's why we use a buildsystem so we don't have to deal with this mess everytime.
 Adding new source files is a pain this way, but can be some what cleaned up (see [gpp_build.bat](/gpp_build.bat))
 
+[/.vscode/settings.json]()

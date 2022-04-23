@@ -52,3 +52,47 @@ Just for the sake of the argument how would we go about building this with g++?
 What a mess! That's why we use a buildsystem so we don't have to deal with this mess everytime.
 Adding new source files is a pain this way, but can be some what cleaned up (see [gpp_build.bat](/gpp_build.bat))
 
+# VSCode
+**WIP: (currently Windows Only, tasks.json need to be modified for other platforms)**
+
+
+This project was designed to work both with VSCode and the command line.
+In order to get keybinds working as wanted I had to create per project keybinds (which is generally not possible in vscode), but you can do it like so:
+
+Define a config variable inside [settings.json](/.vscode/settings.json)
+```json
+"workspaceKeybindings.gmfcCMakeApp.enabled": true
+```
+
+And inside your keybindings.json (command pallet: `> Open Keyboard Shortcuts (JSON)`)
+```json
+// Place your key bindings in this file to override the defaults
+[
+      {
+        "key": "ctrl+shift+f5",
+        "command": "workbench.action.tasks.runTask",
+        "args": "Build and Run Project",
+        "when": "config.workspaceKeybindings.gmfcCMakeApp.enabled"
+      },
+	  // more custom keybinds ....
+]
+```
+
+Even though this custom command will be defined globally for all vscode projects, it will not run when the project doesn't define `gmfcCMakeApp.enabled: true` inside it's [settings.json](/.vscode/settings.json).
+
+I've decided the go with `"Build and Run Project"` as the standard name for a build and run task.
+
+Which correlates to the [tasks.json](/.vscode/tasks.json)s' task for building and running the project.
+
+[tasks.json](/.vscode/tasks.json) defines three tasks:
+
+* Generate Cmake - Generate a make project with `MinGW Makefiles` inside  directory
+* Build Cmake - Build, Link, and compile the project within the [build](/build) directory
+* Run Project - Run the executable `app.exe` inside [build](/build) directory
+* Build and Run Project - Run tasks: `Build Cmake` and `Run Project` in sequence.
+
+That last tasks is the one that is assigned to the shortcut.
+
+As for [launch.json](/.vscode/launch.json) there are 2 launch modes:
+* Launch: Build and Debug program - Runs `Build Cmake` task and run gdb against the executable
+* Launch: Build and Run Program - Run tasks: `Build and Run Project`
